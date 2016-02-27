@@ -24,6 +24,7 @@
     "express": "^4.13.4",
     "firebase": "^2.4.1",
     "firebase-token-generator": "^2.0.0",
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "parse-json-response": "^1.0.1"
   }
 }
