@@ -1,0 +1,7 @@
+node_modules/
+
+# OS_X cache files
+*.DS_Store
+
+# Emacs Cache files
+.#*

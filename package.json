@@ -1,0 +1,23 @@
+{
+  "name": "spartahack2016",
+  "version": "1.0.0",
+  "description": "Hackthon idea for SpartaHack 2016",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Salil999/SpartaHack2016.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Salil999/SpartaHack2016/issues"
+  },
+  "homepage": "https://github.com/Salil999/SpartaHack2016#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "firebase": "^2.4.1"
+  }
+}
