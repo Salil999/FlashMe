@@ -39,14 +39,17 @@
 	<div class="container">
 		<h1 id="name" class="text-center"><%= name %></h1>
 		<h2 style="padding-bottom: 2.0em;" id="slogan" class="text-center">Your Classes</h2>
+		<% classes.forEach(function(class_name){  %>
+		<div style="padding-bottom: 1.5em;" class="col-md-2 text-center troll">
+		<a href="/addClass/<%= class_name%>" class="btn btn-block btn-lg btn-primary"><%= class_name %></a>
+		<% }); %>
+		</div>
 	</div>
 
 	<div class="container">
 		<div class="row">
 			
-			<div style="padding-bottom: 1.5em;" class="col-md-2 text-center troll">
-				<a class="btn btn-block btn-lg btn-primary"><%= class_name %></a>
-			</div>
+
 		</div>
 	</div>
 

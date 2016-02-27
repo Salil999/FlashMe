@@ -9,7 +9,7 @@ var user = require('./refs/user.js');
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'views')));
 
 app.use(bodyParser.json());
@@ -30,6 +30,10 @@ app.get('/signup', function(req, res) {
     res.sendFile(path.join(__dirname, 'views/signup.html'));
 });
 app.post('/signup', user.postSignup);
+app.get('/addClass/:class_name', function(req,res){
+	console.log("success!!");
+});
+app.get('/profile/:uid', user.getProfile);
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'views/index.html'));
 });
