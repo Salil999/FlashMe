@@ -21,15 +21,13 @@ app.use(cookieParser());
   next();
 });*/
 
-app.get('/signup', function(req,res){
+app.get('/signin', function(req,res){
 	//res.render('signin');
 	res.sendFile(path.join(__dirname, 'views/signin.html'));
 });
 
-app.post('/signup', function(req, res){
-	console.log('Test');
-});
-
+app.post('/signin', user.postLogin);
+//app.get('/show', user.printUser);
 app.get('/', function(req,res){
 	res.sendFile(path.join(__dirname, 'views/index.html'));
 });

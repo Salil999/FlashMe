@@ -1,20 +1,41 @@
 var db = new Firebase("https://spartahack2016.firebaseio.com");
 var users =  db.child('users');
-var token = require('firebase-token-generator');
+var tokenGen = require('firebase-token-generator');
+//var token = tokenGen.createToken();
 /**
  * POST /login
  * Sign in using email and password.
  */
-exports.postLogin = function(req, res) {
-	console.log("ssfbkjs");
-	db.auth(token, function(error) {
-		if(error) {
-		console.log("Login Failed!", error);
-		} else {
-		console.log("Login Succeeded!");
+exports.postLogin = function(req,res){
+	db.authWithPassword({
+		email: req.body.email,
+		password: req.body.password
+	}, function(err, authData){
+		if(err){
+			console.log("err!");
+		}
+		else{
+			console.log("auth succes ! ", authData);
+			res.redirect('/');
+		}
+	}, { remember: "sessionOnly"});
+};
+/**
+ * POST /signup
+ * Sign in using email and password.
+ */
+exports.postSignup = function(req, res) {
+	db.createUser({
+		email: req.body.name,
+		password: req.body.password
+	}, function(error, authData){
+		if(error){
+			console.log("err: ", error);
+		}
+		else {
+			console.log("success! with uid: ", userData.uid);
 		}
 	});
-	res.redirect('/');
 };
 
 /**
