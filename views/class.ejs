@@ -37,7 +37,7 @@
 	</div>
 
 	<div class="container">
-		<form class="form-horizontal" method="POST">
+		<form action="/class/<%= class_name%>" class="form-horizontal" method="POST">
 			<div class="form-group">
             	<label for="question" class="col-sm-2 control-label">Add a question</label>
             	<!-- need to add an option that lets them add n number of questions -->
@@ -55,7 +55,7 @@
 	<div class="container">
 		<% if(!questions||!questions[0]) { %>
 		<p>No question added yet ! </p>
-		<% } else { // } %>
+		<% } else { %>
 		<% questions.forEach(function(question){ %>
 		<p> question </p>
 		<% }); } %>

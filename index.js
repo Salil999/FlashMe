@@ -34,7 +34,8 @@ app.get('/profile/:uid', user.getProfile);
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'views/index.html'));
 });
-
+app.get('/class/:class_name', user.getClass);
+app.post('/class/:class_name', user.postClass);
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));
 });

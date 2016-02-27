@@ -74,20 +74,23 @@ exports.getProfile = function(req, res) {
         console.log("invalid address");
         res.redirect('/');
     }
-    var username="not set yet";
-    var name="name not set yet";
+    var username;
+    var name;
     var classes = [];
-    (users.child(id)).on('value', function(snapshot) {
+    (users.child(id)).once('value', function(snapshot) {
         username = authData.password.email;
         name = snapshot.val().name;
-        (users.child(id)).child('classes').on('value',function(snapshot){
-            //console.log(snapshot.val());
-            snapshot.forEach(function(class_obj){
-                //console.log(class_obj.key() +" : "+ class_obj.val());
-                classes.push(class_obj.val());
+        (users.child(id)).child('classes').on('value',function(snap){
+            console.log(snap.val());
+            snap.forEach(function(class_obj){
+               // if(class_obj.val()=='questions') return;
+                console.log(class_obj.key() +" : "+ class_obj.val().class_name);
+                classes.push(class_obj.val().class_name);
             });
-        });
+        console.log("classes:"+classes);
         res.render('profile', { username: username, name: name, classes: classes });
+        });
+
     });
 
 };
@@ -100,5 +103,52 @@ exports.addClass = function(req, res) {
     }
     var id = authData.uid;
     //console.log(" " + (users.child(id)).child("name"));
-    (users.child(id)).child("classes").push(req.params.class_name);
+    (users.child(id)).child("classes").push().set({
+        class_name : req.params.class_name,
+        questions: [0]
+    });
+};
+/* for now this link just lets users add questions for a class, later we need to add a link that lets them take a quiz */
+exports.getClass = function(req,res){
+    console.log("got a get request for get class");
+    var authData = db.getAuth();
+    if(!authData){
+        console.log("need to be logged in");
+        res.redirect('/');
+        return;
+    }
+    var id = authData.uid;
+    var class_name = req.params.class_name;
+    var questions = [];
+    /*(users.child(id)).child("classes").child('questions').on('value', function(snapshot){
+        snapshot.forEach(function(question){
+            questions.push(question.val());
+        });
+    });*/
+    res.render('class', { username: authData.password.email, class_name: class_name, questions: questions});
+    //res.render something here
+};
+exports.postClass = function(req,res){
+    var authData = db.getAuth();
+    if(!authData){
+        console.log("need to be logged in");
+        res.redirect('/');
+        return;
+    }
+    var id = authData.uid;
+    var class_name = req.params.class_name;
+
+    (users.child(id)).child('classes').on('value',function(snapshot){
+        snapshot.forEach(function(item){
+            if(item.val().class_name==class_name){ /* this is the class we want to add to*/
+                users.child(id).child('classes').child(item.key()).child('questions').push(req.body.question);
+                console.log("done");
+                /*res.render('class', {username: authData.password.email, class_name: class_name, questions: ["random"] });*/
+            }
+        });
+       //users.child(id).child('classes').child(snapshot.key()).push(req.body.question);
+       //res.redirect('/class/'+class_name);
+       
+    });
+
 };
