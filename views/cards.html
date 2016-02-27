@@ -8,6 +8,15 @@
 	<link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/flat-ui.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+	<link href="css/cards.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('.flashcard').on('click', function () {
+				$('.flashcard').toggleClass('flipped');
+			});
+		});
+	</script>
 </head>
 
 <body>
@@ -18,7 +27,7 @@
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
 						<span class="sr-only">Toggle navigation</span>
 					</button>
-					<a class="navbar-brand" href="/">School Me</a>
+					<a class="navbar-brand" href="">School Me</a>
 				</div>
 				<div class="collapse navbar-collapse" id="navbar-collapse-01">
 					<ul class="nav navbar-nav navbar-right">
@@ -32,27 +41,15 @@
 
 	<div class="container">
 		<h1 class="text-center">School Me</h1>
-		<h2 id="slogan" class="text-center">Educate yourself and monitor your progress.</h2>
-		<div style="padding-top: 3.0em;" class="row">
-			<div class="col-lg-12">
-				<div class="login-form">
-					<form action="/signin" method="post">
-						<div class="form-group">
-							<input name="email" type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name" />
-							<label class="login-field-icon fui-user" for="login-name"></label>
-						</div>
+	</div>
 
-						<div class="form-group">
-							<input name="password" type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
-							<label class="login-field-icon fui-lock" for="login-pass"></label>
-						</div>
-						<button class="btn btn-inverse btn-lg btn-block" type="submit">Log In</button>
-						<a class="login-link" href="#">Lost your password?</a>
-					</form>
-					<hr>
-					<p class="text-center">New Here? Sign up with the button below!</p>
-					<a href="/signup" class="btn btn-primary btn-lg btn-block">Sign Up</a>
-				</div>
+	<div class="stage">
+		<div class="flashcard">
+			<div class="front">
+				<p>Front</p>
+			</div>
+			<div class="back">
+				<p>Back</p>
 			</div>
 		</div>
 	</div>
