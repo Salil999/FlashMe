@@ -74,21 +74,23 @@ exports.getProfile = function(req, res) {
         console.log("invalid address");
         res.redirect('/');
     }
-    var username="not set yet";
-    var name="name not set yet";
+    var username;
+    var name;
     var classes = [];
-    (users.child(id)).on('value', function(snapshot) {
+    (users.child(id)).once('value', function(snapshot) {
         username = authData.password.email;
         name = snapshot.val().name;
-        (users.child(id)).child('classes').once('value',function(snapshot){
-            console.log(snapshot.val());
-            snapshot.forEach(function(class_obj){
+        (users.child(id)).child('classes').on('value',function(snap){
+            console.log(snap.val());
+            snap.forEach(function(class_obj){
                // if(class_obj.val()=='questions') return;
-                //console.log(class_obj.key() +" : "+ class_obj.val());
+                console.log(class_obj.key() +" : "+ class_obj.val().class_name);
                 classes.push(class_obj.val().class_name);
             });
-        });
+        console.log("classes:"+classes);
         res.render('profile', { username: username, name: name, classes: classes });
+        });
+
     });
 
 };
