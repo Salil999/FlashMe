@@ -5,9 +5,9 @@
 	<meta charset="utf-8">
 	<title>School Me</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/flat-ui.min.css" rel="stylesheet">
-	<link href="css/style.css" rel="stylesheet">
+	<link href="public/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="public/css/flat-ui.min.css" rel="stylesheet">
+	<link href="public/css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -18,7 +18,7 @@
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
 						<span class="sr-only">Toggle navigation</span>
 					</button>
-					<a class="navbar-brand" href="#">School Me</a>
+					<a class="navbar-brand" href="/">School Me</a>
 				</div>
 				<div class="collapse navbar-collapse" id="navbar-collapse-01">
 					<ul class="nav navbar-nav navbar-right">
@@ -46,9 +46,12 @@
 							<input name="password" type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
 							<label class="login-field-icon fui-lock" for="login-pass"></label>
 						</div>
-						<button class="btn btn-primary btn-lg btn-block" type="submit">Log In</button>
+						<button class="btn btn-inverse btn-lg btn-block" type="submit">Log In</button>
 						<a class="login-link" href="#">Lost your password?</a>
 					</form>
+					<hr>
+					<p class="text-center">New Here? Sign up with the button below!</p>
+					<a href="/signup" class="btn btn-primary btn-lg btn-block">Sign Up</a>
 				</div>
 			</div>
 		</div>
@@ -59,9 +62,9 @@
 		<blockquote>SpartaHack 2016 | All Rights Reserved.</blockquote>
 	</div>
 
-	<script src="js/vendor/jquery.min.js"></script>
-	<script src="js/vendor/video.js"></script>
-	<script src="js/flat-ui.min.js"></script>
+	<script src="public/js/vendor/jquery.min.js"></script>
+	<script src="public/js/vendor/video.js"></script>
+	<script src="public/js/flat-ui.min.js"></script>
 </body>
 
 </html>

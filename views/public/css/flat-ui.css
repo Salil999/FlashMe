@@ -5883,10 +5883,10 @@ fieldset[disabled] .navbar-inverse .navbar-btn.active {
   text-indent: 3px;
 }
 .login-form .login-field:focus {
-  border-color: #1abc9c;
+  border-color: #34495e;
 }
 .login-form .login-field:focus + .login-field-icon {
-  color: #1abc9c;
+  color: #34495e;
 }
 .login-form .login-field-icon {
   color: #bfc9ca;
