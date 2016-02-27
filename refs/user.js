@@ -80,22 +80,14 @@ exports.getProfile = function(req, res) {
     (users.child(id)).once('value', function(snapshot) {
         username = authData.password.email;
         name = snapshot.val().name;
-        console.log(snapshot.val());
-
-        /*
-        (users.child(id)).child('classes').on('value', function(snap) {
-            console.log(snap.val());
-            snap.forEach(function(class_obj) {
-                // if(class_obj.val()=='questions') return;
-                console.log(class_obj.key() + " : " + class_obj.val().class_name);
-                classes.push(class_obj.val().class_name);
-            });
-            console.log("classes:" + classes);
-            res.render('profile', { username: username, name: name, classes: classes });
-        });
-    */
+        users_classes = snapshot.val().classes;
+        console.log(users_classes);
+        for(var class_obj in users_classes){
+            classes.push(users_classes[class_obj].class_name);
+        }
+        console.log("classes:"+classes);
+        res.render('profile', { username: username, name: name, classes: classes });
     });
-
 };
 exports.addClass = function(req, res) {
     var authData = db.getAuth();
@@ -106,16 +98,16 @@ exports.addClass = function(req, res) {
     }
     var id = authData.uid;
     //console.log(" " + (users.child(id)).child("name"));
-    (users.child(id)).child("classes").update({
-        class_name: req.params.class_name,
+    (users.child(id)).child("classes").push().set({
+        class_name : req.params.class_name,
         questions: [0]
     });
 };
 /* for now this link just lets users add questions for a class, later we need to add a link that lets them take a quiz */
-exports.getClass = function(req, res) {
+exports.getClass = function(req,res){
     console.log("got a get request for get class");
     var authData = db.getAuth();
-    if (!authData) {
+    if(!authData){
         console.log("need to be logged in");
         res.redirect('/');
         return;
@@ -128,14 +120,12 @@ exports.getClass = function(req, res) {
             questions.push(question.val());
         });
     });*/
-    res.render('class', { username: authData.password.email, class_name: class_name, questions: questions });
+    res.render('class', { username: authData.password.email, class_name: class_name, questions: questions});
     //res.render something here
 };
-
-
-exports.postClass = function(req, res) {
+exports.postClass = function(req,res){
     var authData = db.getAuth();
-    if (!authData) {
+    if(!authData){
         console.log("need to be logged in");
         res.redirect('/');
         return;
@@ -143,28 +133,17 @@ exports.postClass = function(req, res) {
     var id = authData.uid;
     var class_name = req.params.class_name;
 
-    id.child('classes').on('value', function(snapshot) {
-        console.log(snapshot.val());
-        snapshot.forEach(function(item) {
-            console.log('function called');
-            console.log();
-            console.log();
-            console.log();
-            console.log(item.val());
+    (users.child(id)).child('classes').once('value',function(snapshot){
+        snapshot.forEach(function(item){
+            if(item.val().class_name==class_name){ /* this is the class we want to add to*/
+                users.child(id).child('classes').child(item.key()).child('questions').push(req.body.question);
+                console.log("done");
+                /*res.render('class', {username: authData.password.email, class_name: class_name, questions: ["random"] });*/
+            }
         });
+       //users.child(id).child('classes').child(snapshot.key()).push(req.body.question);
+       //res.redirect('/class/'+class_name);
+       
     });
-
-    // (users.child(id)).child('classes').on('value', function(snapshot) {
-    //     snapshot.forEach(function(item) {
-    //         if (item.val().class_name == class_name) { /* this is the class we want to add to*/
-    //             users.child(id).child('classes').child(item.key()).child('questions').push(req.body.question);
-    //             console.log("done");
-    //             /*res.render('class', {username: authData.password.email, class_name: class_name, questions: ["random"] });*/
-    //         }
-    //     });
-    //     //users.child(id).child('classes').child(snapshot.key()).push(req.body.question);
-    //     //res.redirect('/class/'+class_name);
-
-    // });
 
 };
