@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/Salil999/SpartaHack2016#readme",
   "dependencies": {
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
+    "errorhandler": "^1.4.3",
     "express": "^4.13.4",
     "firebase": "^2.4.1"
   }
