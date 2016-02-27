@@ -25,19 +25,44 @@ exports.postLogin = function(req,res){
  * Sign in using email and password.
  */
 exports.postSignup = function(req, res) {
+
 	db.createUser({
-		email: req.body.name,
+		email: req.body.email,
 		password: req.body.password
 	}, function(error, authData){
 		if(error){
 			console.log("err: ", error);
 		}
 		else {
-			console.log("success! with uid: ", userData.uid);
+			console.log("success! with uid: ", authData.uid);
+			/* after the user is signed, log him/her in (Firebase DOES NOT do this for you) */
+			db.authWithPassword({
+				email: req.body.email,
+				password: req.body.password
+			}, function(err, authData){
+				if(err){
+					console.log("err! " + err);
+				}
+				else{
+					console.log("auth succes ! ", authData);
+					res.redirect('/');
+				}
+			}, { remember: "sessionOnly" });
+			db.onAuth(function(data){
+				users.child(authData.uid).set({
+					name:toTitleCase(req.body.name)
+				});
+			});
 		}
 	});
+
 };
 
+var toTitleCase = function(str){
+	return str.replace(/\w\S*/g, function(txt) {
+		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+	});
+};
 /**
  * GET /logout
  * Log out.

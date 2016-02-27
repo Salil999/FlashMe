@@ -25,9 +25,11 @@ app.get('/signin', function(req,res){
 	//res.render('signin');
 	res.sendFile(path.join(__dirname, 'views/signin.html'));
 });
-
 app.post('/signin', user.postLogin);
-//app.get('/show', user.printUser);
+app.get('/signup', function(req,res){
+	res.sendFile(path.join(__dirname, 'views/signup.html'));
+});
+app.post('/signup', user.postSignup);
 app.get('/', function(req,res){
 	res.sendFile(path.join(__dirname, 'views/index.html'));
 });
