@@ -80,19 +80,14 @@ exports.getProfile = function(req, res) {
     (users.child(id)).once('value', function(snapshot) {
         username = authData.password.email;
         name = snapshot.val().name;
-        (users.child(id)).child('classes').on('value',function(snap){
-            console.log(snap.val());
-            snap.forEach(function(class_obj){
-               // if(class_obj.val()=='questions') return;
-                console.log(class_obj.key() +" : "+ class_obj.val().class_name);
-                classes.push(class_obj.val().class_name);
-            });
+        users_classes = snapshot.val().classes;
+        console.log(users_classes);
+        for(var class_obj in users_classes){
+            classes.push(users_classes[class_obj].class_name);
+        }
         console.log("classes:"+classes);
         res.render('profile', { username: username, name: name, classes: classes });
-        });
-
     });
-
 };
 exports.addClass = function(req, res) {
     var authData = db.getAuth();
@@ -138,7 +133,7 @@ exports.postClass = function(req,res){
     var id = authData.uid;
     var class_name = req.params.class_name;
 
-    (users.child(id)).child('classes').on('value',function(snapshot){
+    (users.child(id)).child('classes').once('value',function(snapshot){
         snapshot.forEach(function(item){
             if(item.val().class_name==class_name){ /* this is the class we want to add to*/
                 users.child(id).child('classes').child(item.key()).child('questions').push(req.body.question);
