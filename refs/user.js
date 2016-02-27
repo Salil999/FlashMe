@@ -147,7 +147,8 @@ exports.postClass = function(req,res){
     (users.child(id)).child('classes').once('value',function(snapshot){
         snapshot.forEach(function(item){
             if(item.val().class_name==class_name){ /* this is the class we want to add to*/
-                users.child(id).child('classes').child(item.key()).child('questions').push(req.body.question);
+                var q_obj = {question: req.body.question,answer: req.body.answer};
+                users.child(id).child('classes').child(item.key()).child('questions').push(q_obj);
                 res.redirect('/class/'+class_name);
             }
         });
