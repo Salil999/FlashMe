@@ -8,10 +8,9 @@ var db = new Firebase("https://spartahack2016.firebaseio.com");
 var user = require('./refs/user.js');
 var app = express();
 app.set('port', (process.env.PORT || 5000));
+app.use(express.static(path.join(__dirname, 'views/public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'views')));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());

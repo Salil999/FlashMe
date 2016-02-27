@@ -5,9 +5,9 @@
 	<meta charset="utf-8">
 	<title>School Me</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/flat-ui.min.css" rel="stylesheet">
-	<link href="css/style.css" rel="stylesheet">
+	<link href="/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/flat-ui.min.css" rel="stylesheet">
+	<link href="/css/style.css" rel="stylesheet">
 	<script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
 </head>
 
@@ -39,10 +39,15 @@
 	<div class="container">
 		<h1 id="name" class="text-center"><%= name %></h1>
 		<h2 style="padding-bottom: 2.0em;" id="slogan" class="text-center">Your Classes</h2>
+		<% if(!classes) {  %>
+		<p> You have not added any classes </p>
+		<!-- add button over here -->
+		<% } else { %>
 		<% classes.forEach(function(class_name){  %>
 		<div style="padding-bottom: 1.5em;" class="col-md-2 text-center troll">
 		<a href="/addClass/<%= class_name%>" class="btn btn-block btn-lg btn-primary"><%= class_name %></a>
 		<% }); %>
+		<% } %>
 		</div>
 	</div>
 
@@ -57,9 +62,9 @@
 		<hr>
 		<blockquote>SpartaHack 2016 | All Rights Reserved.</blockquote>
 	</div>
-	<script src="js/vendor/jquery.min.js"></script>
-	<script src="js/vendor/video.js"></script>
-	<script src="js/flat-ui.min.js"></script>
+	<script src="/js/vendor/jquery.min.js"></script>
+	<script src="/js/vendor/video.js"></script>
+	<script src="/js/flat-ui.min.js"></script>
 </body>
 
 </html>
