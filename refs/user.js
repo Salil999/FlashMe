@@ -60,35 +60,6 @@ var toTitleCase = function(str) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
 };
-<<<<<<< HEAD
-/**
- * GET /logout
- * Log out.
- */
-/*exports.logout = function(req, res) {
-  req.logout();
-  res.redirect('/');
-};
-*/
-/**
- * GET /signup
- * Signup page.
- */
-/*
-exports.getSignup = function(request, response) {
-  //if (req.user) return res.redirect('/');
-  response.render('pages/signup');
-  console.log('get ');
-};
-*/
-/**
- * POST /signup
- * Create a new local account.
- */
-/*
-exports.postSignup = function(req, res, next) {
-=======
->>>>>>> c59c1fa0bab8d604054145739c1d237180d393bb
 
 exports.getProfile = function(req,res){
 	var authData = db.getAuth();
