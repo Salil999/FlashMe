@@ -1,6 +1,7 @@
 var db = new Firebase("https://spartahack2016.firebaseio.com");
 var users = db.child('users');
 var tokenGen = require('firebase-token-generator');
+
 //var token = tokenGen.createToken();
 /**
  * POST /login
@@ -61,24 +62,43 @@ var toTitleCase = function(str) {
     });
 };
 
-exports.getProfile = function(req,res){
-	var authData = db.getAuth();
-	if(!authData) {
-		console.log("need to be logged in !");
-		res.redirect('/');
-	}
-	var id = authData.uid;
-	if(req.params.uid!=id){
-		console.log("invalid address");
-		res.redirect('/');
-	}
-	(users.child(id)).on('value',function(snapshot){
-		//var data = users.child(id).key();
-		var username = authData.password.email;
-		var name = snapshot.val().name;
-		var classes = snapshot.val().classes;
-		console.log("username:"+username);
-		res.render('profile', {username: username , name: name, classes: classes });
-	});
+exports.getProfile = function(req, res) {
+    var authData = db.getAuth();
+    if (!authData) {
+        console.log("need to be logged in !");
+        res.redirect('/');
+        return;
+    }
+    var id = authData.uid;
+    if (req.params.uid != id) {
+        console.log("invalid address");
+        res.redirect('/');
+    }
+    var username="not set yet";
+    var name="name not set yet";
+    var classes = [];
+    (users.child(id)).on('value', function(snapshot) {
+        username = authData.password.email;
+        name = snapshot.val().name;
+        (users.child(id)).child('classes').on('value',function(snapshot){
+            //console.log(snapshot.val());
+            snapshot.forEach(function(class_obj){
+                //console.log(class_obj.key() +" : "+ class_obj.val());
+                classes.push(class_obj.val());
+            });
+        });
+        res.render('profile', { username: username, name: name, classes: classes });
+    });
 
+};
+exports.addClass = function(req, res) {
+    var authData = db.getAuth();
+    if (!authData) {
+        console.log("need to be logged in");
+        res.redirect('/');
+        return;
+    }
+    var id = authData.uid;
+    //console.log(" " + (users.child(id)).child("name"));
+    (users.child(id)).child("classes").push(req.params.class_name);
 };
