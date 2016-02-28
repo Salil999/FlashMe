@@ -16,6 +16,22 @@
 				var e = $(this);
 				e.toggleClass('flipped');
 			});
+			var db = new Firebase("https://spartahack2016.firebaseio.com");
+			var users = db.child('users');
+			var complete = 0;
+			var attempted = 0;
+			var elements = document.getElementsByClassName('flashcard');
+			$('.right').on('click',function(){
+				complete++;
+				attempted++;
+				elements[attempted].toggle();
+				console.log(elements[attempted]);
+			});
+			$('.wrong').on('click',function(){
+				attempted++;
+				elements[attempted].toggle();
+				console.log(elements[attempted]);
+			});
 		});
 	</script>
 </head>
@@ -60,7 +76,7 @@
 	<div class="stage">
 		<% questions.forEach(function(qa){  %>
 			<div style="padding-bottom: 20.0em;" class="row text-center">
-				<span onclick="alert('Wrong');" style="margin-top: 2.0em; font-size: 5.0em; color: red;" class="col-xs-2 fui-cross-circle"></span>
+				<span style="margin-top: 2.0em; font-size: 5.0em; color: red;" class="col-xs-2 fui-cross-circle wrong"></span>
 				<div class="col-xs-8">
 					<div class="flashcard">
 						<div class="front">
@@ -75,7 +91,7 @@
 						</div>
 					</div>
 				</div>
-				<span onclick="alert('Right');" style="margin-top: 2.0em; font-size: 5.0em; color: green;" class="col-xs-2 fui-check-circle"></span>
+				<span style="margin-top: 2.0em; font-size: 5.0em; color: green;" class="col-xs-2 fui-check-circle right"></span>
 			</div>
 			<% }); %>
 	</div>
