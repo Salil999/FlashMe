@@ -1,7 +1,7 @@
 var db = new Firebase("https://spartahack2016.firebaseio.com");
 var users = db.child('users');
 var tokenGen = require('firebase-token-generator');
-var plotly = require('plotly');
+var plotly = require('plotly')('Salil999', 'kxd6nm4m81');;
 //var token = tokenGen.createToken();
 /**
  * POST /login
@@ -86,7 +86,7 @@ exports.getProfile = function(req, res) {
             classes.push(users_classes[class_obj].class_name);
         }
         console.log("classes:" + classes);
-        res.render('profile', {uid: id, username: username, name: name, classes: classes });
+        res.render('profile', { uid: id, username: username, name: name, classes: classes });
     });
 };
 exports.postProfile = function(req, res) {
@@ -133,7 +133,7 @@ exports.getClass = function(req, res) {
             }
         }
         //console.log(questions);
-        res.render('class', {uid: id, username: authData.password.email, class_name: class_name, questions: questions });
+        res.render('class', { uid: id, username: authData.password.email, class_name: class_name, questions: questions });
     });
 };
 exports.postClass = function(req, res) {
@@ -180,12 +180,12 @@ exports.getCards = function(req, res) {
                 }
             }
         }
-        res.render('cards', {uid: id, username: authData.password.email, questions: questions, class_name: class_name });
+        res.render('cards', { uid: id, username: authData.password.email, questions: questions, class_name: class_name });
     });
 };
 exports.getPerformance = function(req, res) {
     var authData = db.getAuth();
-    if(!authData) {
+    if (!authData) {
         console.log("need to be logged in");
         res.redirect('/');
         return;
@@ -201,16 +201,32 @@ exports.getPerformance = function(req, res) {
         // PLOTLY INFORMATION //
         ////////////////////////
 
-        var plotOptions = {
-            x: [
-            0,
-            1,
-            2,
-            3,
-            4
-            ]
+        var plottingData = [{
+            x: [0, 1, 2, 3, 4],
+            y: [0, 1, 2, 3, 4],
+            name: "Current Score",
+            type: "scatter"
+        }, {
+            x: [1, 3, 5, 7, 9],
+            y: [1, 3, 5, 7, 9],
+            name: "Historical Data",
+            type: "scatter"
+        }];
+
+        var layout = {
+            title: "Performance Graph",
+            xaxis: {
+                title: "Tries"
+            },
+            yaxis: {
+                title: "Percentage Score"
+            }
         };
+
+        var graphOptions = { layout: layout, filename: "flashme", fileopt: "overwrite" };
+        plotly.plot(plottingData, graphOptions, function(err, msg) {
+            res.render('performance', { uid: id, username: authData.password.email, imgURL: msg.url + '.jpeg' });
+        });
 
     });
 };
-
