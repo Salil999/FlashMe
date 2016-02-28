@@ -111,7 +111,7 @@
 						$('.score').show();
 					});
 					users.child("<%=uid%>").child('performance').child("<%=class_name%>").push().set({
-						score: complete
+						score: (complete/attempted)*100
 					});
 				}	
 				$(elem).hide();	

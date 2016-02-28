@@ -1,7 +1,7 @@
 var db = new Firebase("https://spartahack2016.firebaseio.com");
 var users = db.child('users');
 var tokenGen = require('firebase-token-generator');
-var plotly = require('plotly')('Salil999', 'kxd6nm4m81');;
+var plotly = require('plotly')('aashna956', '5qzwoyptvz');
 //var token = tokenGen.createToken();
 /**
  * POST /login
@@ -208,15 +208,15 @@ exports.getPerformanceOptions = function(req, res) {
 };
 exports.getPerformance = function(req, res) {
     var authData = db.getAuth();
-    if (!authData) {
-        console.log("need to be logged in");
-        res.redirect('/');
-        return;
-    }
+     if (!authData) {
+         console.log("need to be logged in");
+         res.redirect('/');
+         return;
+     }
     var id = authData.uid;
     var class_name = req.params.class_name;
 
-    (users.child(id)).child('performance').child(class_name).once('value', function(snapshot) {
+    users.child(id).child('performance').child(class_name).once('value', function(snapshot) {
         /*var username = snapshot.val().username;
         var users_classes = snapshot.val().classes;*/
         var data = snapshot.val();
@@ -224,23 +224,9 @@ exports.getPerformance = function(req, res) {
         console.log();
         if (data) {
             var i = 1;
-            var xFirstPlot = [];
-            var yFirstPlot = [];
-            var xSecondPlot = [];
-            var ySecondPlot = [];
-
-            for (var class_obj in data) {
-                xFirstPlot.push(i++);
-                yFirstPlot.push(data[class_obj].score);
-            }
-
-            ////////////////////////
-            // PLOTLY INFORMATION //
-            ////////////////////////
-
             var plottingData = [{
-                x: xFirstPlot,
-                y: yFirstPlot,
+                x: [],
+                y: [],
                 name: "Historical Data",
                 type: "scatter"
             }, {
@@ -249,6 +235,23 @@ exports.getPerformance = function(req, res) {
                 name: "Cumulative Average",
                 type: "scatter"
             }];
+            for (var class_obj in data) {
+                //console.log(i++);
+                //console.log(data[class_obj].score);
+                (plottingData[0].x).push(i++);
+                (plottingData[0].y).push(data[class_obj].score);
+                //xFirstPlot.push(i++);
+                //yFirstPlot.push(data[class_obj].score);
+
+            }
+
+            //console.log(xFirstPlot);
+            //console.log(yFirstPlot);
+
+            ////////////////////////
+            // PLOTLY INFORMATION //
+            ////////////////////////
+
 
             var layout = {
                 title: "Performance Graph",
@@ -256,15 +259,22 @@ exports.getPerformance = function(req, res) {
                     title: "Tries"
                 },
                 yaxis: {
-                    title: "Percentage Score"
+                    title: "Percentage Score (%)"
                 }
             };
 
             var graphOptions = { layout: layout, filename: "flashme", fileopt: "overwrite" };
             plotly.plot(plottingData, graphOptions, function(err, msg) {
-                res.render('performance', { uid: id, username: authData.password.email, imgURL: msg.url + '.jpeg' });
+                if (!err&&msg) {
+                    res.render('performance', { uid: id, username: authData.password.email, imgURL: msg.url + '.jpeg' });
+                } else {
+                	console.log(err);
+                    var imgURL = 'http://placehold.it/350x150';
+                    res.render('performance', { uid: id, username: authData.password.email, imgURL: imgURL });
+                }
             });
         } else {
+            console.log('redirect');
             res.redirect('/main/performance');
         }
     });
