@@ -16,7 +16,7 @@ exports.postLogin = function(req, res) {
             console.log("err!");
         } else {
             console.log("auth succes ! ", authData);
-            res.redirect('/');
+            res.redirect('/profile/'+authData.uid);
         }
     }, { remember: "sessionOnly" });
 };
@@ -43,7 +43,7 @@ exports.postSignup = function(req, res) {
                     console.log("err! " + err);
                 } else {
                     console.log("auth succes ! ", authData);
-                    res.redirect('/');
+                    res.redirect('/profile/'+authData.uid);
                 }
             }, { remember: "sessionOnly" });
             db.onAuth(function(data) {
