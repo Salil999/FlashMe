@@ -20,16 +20,13 @@ app.use(cookieParser());
   next();
 });*/
 
-app.get('/test', function(req, res) {
-	res.sendFile(path.join(__dirname, 'views/cards.html'));
-});
+app.get('/quiz/:class_name', user.getCards);
 
 app.get('/about', function(req, res) {
 	res.sendFile(path.join(__dirname, 'views/about.html'));
 });
 
 app.get('/signin', function(req, res) {
-    //res.render('signin');
     res.sendFile(path.join(__dirname, 'views/signin.html'));
 });
 app.post('/signin', user.postLogin);
