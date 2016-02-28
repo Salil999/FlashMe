@@ -16,22 +16,6 @@
 				var e = $(this);
 				e.toggleClass('flipped');
 			});
-			var db = new Firebase("https://spartahack2016.firebaseio.com");
-			var users = db.child('users');
-			var complete = 0;
-			var attempted = 0;
-			var elements = document.getElementsByClassName('flashcard');
-			$('.right').on('click',function(){
-				complete++;
-				attempted++;
-				elements[attempted].toggle();
-				console.log(elements[attempted]);
-			});
-			$('.wrong').on('click',function(){
-				attempted++;
-				elements[attempted].toggle();
-				console.log(elements[attempted]);
-			});
 		});
 	</script>
 </head>
@@ -75,7 +59,7 @@
 
 	<div class="stage">
 		<% questions.forEach(function(qa){  %>
-			<div style="padding-bottom: 20.0em;" class="row text-center">
+			<div style="padding-bottom: 20.0em;" class="row text-center question">
 				<span style="margin-top: 2.0em; font-size: 5.0em; color: red;" class="col-xs-2 fui-cross-circle wrong"></span>
 				<div class="col-xs-8">
 					<div class="flashcard">
@@ -95,7 +79,9 @@
 			</div>
 			<% }); %>
 	</div>
-
+	<div class="score text-center" style="display:hidden">
+		
+	</div>
 	<div class="container">
 		<hr>
 		<blockquote>SpartaHack 2016 | All Rights Reserved.</blockquote>
@@ -104,6 +90,42 @@
 	<script src="/js/vendor/jquery.min.js"></script>
 	<script src="/js/vendor/video.js"></script>
 	<script src="/js/flat-ui.min.js"></script>
+	 <script src="https://cdn.firebase.com/js/client/2.2.3/firebase.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			jQuery.fn.pop = [].pop;
+			jQuery.fn.shift = [].shift;
+			var db = new Firebase("https://spartahack2016.firebaseio.com");
+			var users = db.child('users');
+			var complete = 0;
+			var attempted = 0;
+			var elements = $('.question');
+			$('.right').click(function(){
+				complete++;
+				attempted++;
+				var elem = elements.shift();
+				if(!elements[0]) {
+					$(elem).hide(100,function(){
+						$('.score').append("<h3> Your score: "+complete+"/"+attempted+" </h3>");
+						$('.score').show();
+					});
+				}
+				//console.log(elements[attempted]);		
+				$(elem).hide();	
+			});
+			$('.wrong').click(function(){
+				attempted++;
+				var elem = elements.shift();
+				if(!elements[0]) {
+					$(elem).hide(100, function(){
+						$('.score').append("<h3> Your score: "+complete+"/"+attempted+" </h3>");
+						$('.score').show();
+					});
+				}
+				$(elem).hide();
+			});
+		});
+	</script>
 </body>
 
 </html>
