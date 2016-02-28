@@ -102,6 +102,7 @@ exports.addClass = function(req, res) {
         class_name : req.params.class_name,
         questions: [0]
     });
+    res.redirect('/class/'+req.params.class_name);
 };
 /* for now this link just lets users add questions for a class, later we need to add a link that lets them take a quiz */
 exports.getClass = function(req,res){
@@ -152,5 +153,32 @@ exports.postClass = function(req,res){
                 res.redirect('/class/'+class_name);
             }
         });
+    });
+};
+exports.getCards = function(req,res){
+   var authData = db.getAuth();
+    if(!authData){
+        console.log("need to be logged in");
+        res.redirect('/');
+        return;
+    }
+    var id = authData.uid;
+    var class_name = req.params.class_name;
+    var questions = [];
+    (users.child(id)).once('value', function(snapshot){
+        var username = snapshot.val().name;
+        var users_classes = snapshot.val().classes;
+        for(var class_obj in users_classes){
+            var class_n = users_classes[class_obj].class_name;
+            if(class_n==class_name){ // found the class we need to show questions for
+               // console.log(users_classes[class_obj].questions);
+                the_questions = users_classes[class_obj].questions;
+                for(var index in the_questions){
+                    if(the_questions[index]===0) continue;
+                    questions.push(the_questions[index]);
+                }
+            }
+        }
+        res.render('cards', {questions:questions, class_name:class_name});
     });
 };
