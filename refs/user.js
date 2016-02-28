@@ -216,13 +216,13 @@ exports.getPerformance = function(req, res) {
         ////////////////////////
 
         var plottingData = [{
-            x: [1, 2, 3, 4],
-            y: [80, 76, 84, 92, 87],
+            x: xFirstPlot,
+            y: yFirstPlot,
             name: "Historical Data",
             type: "scatter"
         }, {
-            x: xFirstPlot,
-            y: yFirstPlot,
+            x: [1, 2, 3, 4],
+            y: [92, 87, 95, 84],
             name: "Cumulative Average",
             type: "scatter"
         }];
