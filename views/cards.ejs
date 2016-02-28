@@ -9,7 +9,6 @@
 	<link href="/css/flat-ui.min.css" rel="stylesheet">
 	<link href="/css/style.css" rel="stylesheet">
 	<link href="/css/cards.css" rel="stylesheet">
-
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script>
 		$(document).ready(function () {
@@ -47,15 +46,25 @@
 
 	<div class="stage">
 		<% questions.forEach(function(qa){  %>
-		<div class="flashcard">
-			<div class="front">
-				<p style="font-size: 1em;"><%= qa.question %></p>
+			<div style="padding-bottom: 20.0em;" class="row text-center">
+				<span onclick="alert('Wrong');" style="margin-top: 2.0em; font-size: 5.0em; color: red;" class="col-xs-2 fui-cross-circle"></span>
+				<div class="col-xs-8">
+					<div class="flashcard">
+						<div class="front">
+							<p style="font-size: 1em;">
+								<%= qa.question %>
+							</p>
+						</div>
+						<div class="back">
+							<p style="font-size: 1em;">
+								<%= qa.answer %>
+							</p>
+						</div>
+					</div>
+				</div>
+				<span onclick="alert('Right');" style="margin-top: 2.0em; font-size: 5.0em; color: green;" class="col-xs-2 fui-check-circle"></span>
 			</div>
-			<div class="back">
-				<p style="font-size: 1em;"><%= qa.answer %></p>
-			</div>
-		</div>
-		<% }); %>
+			<% }); %>
 	</div>
 
 	<div class="container">
