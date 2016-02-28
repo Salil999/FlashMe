@@ -14,7 +14,8 @@
 	<script>
 		$(document).ready(function () {
 			$('.flashcard').on('click', function () {
-				$('.flashcard').toggleClass('flipped');
+				var e = $(this);
+				e.toggleClass('flipped');
 			});
 		});
 	</script>

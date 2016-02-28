@@ -25,7 +25,6 @@ app.get('/quiz/:class_name', user.getCards);
 app.get('/about', function(req, res) {
 	res.sendFile(path.join(__dirname, 'views/about.html'));
 });
-
 app.get('/signin', function(req, res) {
     res.sendFile(path.join(__dirname, 'views/signin.html'));
 });
