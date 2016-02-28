@@ -208,11 +208,11 @@ exports.getPerformanceOptions = function(req, res) {
 };
 exports.getPerformance = function(req, res) {
     var authData = db.getAuth();
-     if (!authData) {
-         console.log("need to be logged in");
-         res.redirect('/');
-         return;
-     }
+    if (!authData) {
+        console.log("need to be logged in");
+        res.redirect('/');
+        return;
+    }
     var id = authData.uid;
     var class_name = req.params.class_name;
 
@@ -228,11 +228,6 @@ exports.getPerformance = function(req, res) {
                 x: [],
                 y: [],
                 name: "Historical Data",
-                type: "scatter"
-            }, {
-                x: [1, 2, 3, 4],
-                y: [92, 87, 95, 84],
-                name: "Cumulative Average",
                 type: "scatter"
             }];
             for (var class_obj in data) {
@@ -265,10 +260,10 @@ exports.getPerformance = function(req, res) {
 
             var graphOptions = { layout: layout, filename: "flashme", fileopt: "overwrite" };
             plotly.plot(plottingData, graphOptions, function(err, msg) {
-                if (!err&&msg) {
+                if (!err && msg) {
                     res.render('performance', { uid: id, username: authData.password.email, imgURL: msg.url + '.jpeg' });
                 } else {
-                	console.log(err);
+                    console.log(err);
                     var imgURL = 'http://placehold.it/350x150';
                     res.render('performance', { uid: id, username: authData.password.email, imgURL: imgURL });
                 }
