@@ -1,7 +1,7 @@
 var db = new Firebase("https://spartahack2016.firebaseio.com");
 var users = db.child('users');
 var tokenGen = require('firebase-token-generator');
-
+var plotly = require('plotly');
 //var token = tokenGen.createToken();
 /**
  * POST /login
@@ -183,3 +183,34 @@ exports.getCards = function(req, res) {
         res.render('cards', {uid: id, username: authData.password.email, questions: questions, class_name: class_name });
     });
 };
+exports.getPerformance = function(req, res) {
+    var authData = db.getAuth();
+    if(!authData) {
+        console.log("need to be logged in");
+        res.redirect('/');
+        return;
+    }
+    var id = authData.uid;
+    var class_name = req.params.class_name;
+
+    (users.child(id)).once('value', function(snapshot) {
+        var username = snapshot.val().username;
+        var users_classes = snapshot.val().classes;
+
+        ////////////////////////
+        // PLOTLY INFORMATION //
+        ////////////////////////
+
+        var plotOptions = {
+            x: [
+            0,
+            1,
+            2,
+            3,
+            4
+            ]
+        };
+
+    });
+};
+
