@@ -15,7 +15,7 @@ exports.postLogin = function(req, res) {
         if (err) {
             console.log("err!");
         } else {
-            console.log("auth succes ! ", authData);
+            //console.log("auth succes ! ", authData);
             res.redirect('/profile/' + authData.uid);
         }
     }, { remember: "sessionOnly" });
@@ -33,7 +33,7 @@ exports.postSignup = function(req, res) {
         if (error) {
             console.log("err: ", error);
         } else {
-            console.log("success! with uid: ", authData.uid);
+            //console.log("success! with uid: ", authData.uid);
             /* after the user is signed, log him/her in (Firebase DOES NOT do this for you) */
             db.authWithPassword({
                 email: req.body.email,
@@ -42,7 +42,7 @@ exports.postSignup = function(req, res) {
                 if (err) {
                     console.log("err! " + err);
                 } else {
-                    console.log("auth succes ! ", authData);
+                    //console.log("auth succes ! ", authData);
                     res.redirect('/profile/' + authData.uid);
                 }
             }, { remember: "sessionOnly" });
@@ -81,11 +81,11 @@ exports.getProfile = function(req, res) {
         username = authData.password.email;
         name = snapshot.val().name;
         users_classes = snapshot.val().classes;
-        console.log(users_classes);
+        //console.log(users_classes);
         for (var class_obj in users_classes) {
             classes.push(users_classes[class_obj].class_name);
         }
-        console.log("classes:" + classes);
+        //console.log("classes:" + classes);
         res.render('profile', { uid: id, username: username, name: name, classes: classes });
     });
 };
@@ -193,23 +193,37 @@ exports.getPerformance = function(req, res) {
     var id = authData.uid;
     var class_name = req.params.class_name;
 
-    (users.child(id)).once('value', function(snapshot) {
+    (users.child(id)).child('performance').once('value', function(snapshot) {
         var username = snapshot.val().username;
         var users_classes = snapshot.val().classes;
+        var data = snapshot.val().cs225;
+        console.log(data);
+        console.log();
+
+        var i = 1;
+        var xFirstPlot = [];
+        var yFirstPlot = [];
+        var xSecondPlot = [];
+        var ySecondPlot = [];
+
+        for (var class_obj in data) {
+            xFirstPlot.push(i++);
+            yFirstPlot.push(data[class_obj].score);
+        }
 
         ////////////////////////
         // PLOTLY INFORMATION //
         ////////////////////////
 
         var plottingData = [{
-            x: [0, 1, 2, 3, 4],
-            y: [0, 1, 2, 3, 4],
-            name: "Current Score",
+            x: [1, 2, 3, 4],
+            y: [80, 76, 84, 92, 87],
+            name: "Historical Data",
             type: "scatter"
         }, {
-            x: [1, 3, 5, 7, 9],
-            y: [1, 3, 5, 7, 9],
-            name: "Historical Data",
+            x: xFirstPlot,
+            y: yFirstPlot,
+            name: "Cumulative Average",
             type: "scatter"
         }];
 

@@ -97,6 +97,7 @@
 			jQuery.fn.shift = [].shift;
 			var db = new Firebase("https://spartahack2016.firebaseio.com");
 			var users = db.child('users');
+			var id 
 			var complete = 0;
 			var attempted = 0;
 			var elements = $('.question');
@@ -109,8 +110,10 @@
 						$('.score').append("<h3> Your score: "+complete+"/"+attempted+" </h3>");
 						$('.score').show();
 					});
-				}
-				//console.log(elements[attempted]);		
+					users.child("<%=uid%>").child('performance').child("<%=class_name%>").push().set({
+						score: complete
+					});
+				}	
 				$(elem).hide();	
 			});
 			$('.wrong').click(function(){
@@ -120,6 +123,9 @@
 					$(elem).hide(100, function(){
 						$('.score').append("<h3> Your score: "+complete+"/"+attempted+" </h3>");
 						$('.score').show();
+						users.child("<%=uid%>").child('performance').child("<%=class_name%>").push().set({
+							score: (complete/attempted)*100
+						});
 					});
 				}
 				$(elem).hide();
