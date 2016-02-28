@@ -16,7 +16,7 @@ exports.postLogin = function(req, res) {
             console.log("err!");
         } else {
             console.log("auth succes ! ", authData);
-            res.redirect('/profile/'+authData.uid);
+            res.redirect('/profile/' + authData.uid);
         }
     }, { remember: "sessionOnly" });
 };
@@ -43,7 +43,7 @@ exports.postSignup = function(req, res) {
                     console.log("err! " + err);
                 } else {
                     console.log("auth succes ! ", authData);
-                    res.redirect('/profile/'+authData.uid);
+                    res.redirect('/profile/' + authData.uid);
                 }
             }, { remember: "sessionOnly" });
             db.onAuth(function(data) {
@@ -82,34 +82,34 @@ exports.getProfile = function(req, res) {
         name = snapshot.val().name;
         users_classes = snapshot.val().classes;
         console.log(users_classes);
-        for(var class_obj in users_classes){
+        for (var class_obj in users_classes) {
             classes.push(users_classes[class_obj].class_name);
         }
-        console.log("classes:"+classes);
-        res.render('profile', { username: username, name: name, classes: classes });
+        console.log("classes:" + classes);
+        res.render('profile', {uid: id, username: username, name: name, classes: classes });
     });
 };
-exports.postProfile = function(req,res){
+exports.postProfile = function(req, res) {
     var authData = db.getAuth();
-    if(!authData){
+    if (!authData) {
         console.log("need to be logged in !");
         return;
     }
     var id = authData.uid;
     var class_num = req.body.number;
-    var class_subj =  (req.body.subject).toUpperCase();
+    var class_subj = (req.body.subject).toUpperCase();
     var class_name = class_subj + " " + class_num;
     (users.child(id)).child("classes").push().set({
-        class_name : class_name,
+        class_name: class_name,
         questions: [0]
     });
-    res.redirect('/class/'+class_name);
+    res.redirect('/class/' + class_name);
 };
 /* for now this link just lets users add questions for a class, later we need to add a link that lets them take a quiz */
-exports.getClass = function(req,res){
+exports.getClass = function(req, res) {
     //console.log("got a get request for get class");
     var authData = db.getAuth();
-    if(!authData){
+    if (!authData) {
         console.log("need to be logged in");
         res.redirect('/');
         return;
@@ -118,27 +118,27 @@ exports.getClass = function(req,res){
     var class_name = req.params.class_name;
     //console.log("class_name "+ class_name );
     var questions = [];
-    (users.child(id)).once('value', function(snapshot){
+    (users.child(id)).once('value', function(snapshot) {
         var users_classes = snapshot.val().classes;
-        for(var class_obj in users_classes){
+        for (var class_obj in users_classes) {
             var class_n = users_classes[class_obj].class_name;
             //console.log(class_n);
-            if(class_n==class_name){ // found the class we need to show questions for
+            if (class_n == class_name) { // found the class we need to show questions for
                 //console.log(users_classes[class_obj].questions);
                 the_questions = users_classes[class_obj].questions;
-                for(var index in the_questions){
-                    if(the_questions[index]===0) continue;
+                for (var index in the_questions) {
+                    if (the_questions[index] === 0) continue;
                     questions.push(the_questions[index]);
                 }
             }
         }
         //console.log(questions);
-        res.render('class', { username: authData.password.email, class_name: class_name, questions: questions});
+        res.render('class', {uid: id, username: authData.password.email, class_name: class_name, questions: questions });
     });
 };
-exports.postClass = function(req,res){
+exports.postClass = function(req, res) {
     var authData = db.getAuth();
-    if(!authData){
+    if (!authData) {
         console.log("need to be logged in");
         res.redirect('/');
         return;
@@ -146,19 +146,19 @@ exports.postClass = function(req,res){
     var id = authData.uid;
     var class_name = req.params.class_name;
 
-    (users.child(id)).child('classes').once('value',function(snapshot){
-        snapshot.forEach(function(item){
-            if(item.val().class_name==class_name){ /* this is the class we want to add to*/
-                var q_obj = {question: req.body.question,answer: req.body.answer};
+    (users.child(id)).child('classes').once('value', function(snapshot) {
+        snapshot.forEach(function(item) {
+            if (item.val().class_name == class_name) { /* this is the class we want to add to*/
+                var q_obj = { question: req.body.question, answer: req.body.answer };
                 users.child(id).child('classes').child(item.key()).child('questions').push(q_obj);
-                res.redirect('/class/'+class_name);
+                res.redirect('/class/' + class_name);
             }
         });
     });
 };
-exports.getCards = function(req,res){
-   var authData = db.getAuth();
-    if(!authData){
+exports.getCards = function(req, res) {
+    var authData = db.getAuth();
+    if (!authData) {
         console.log("need to be logged in");
         res.redirect('/');
         return;
@@ -166,20 +166,20 @@ exports.getCards = function(req,res){
     var id = authData.uid;
     var class_name = req.params.class_name;
     var questions = [];
-    (users.child(id)).once('value', function(snapshot){
+    (users.child(id)).once('value', function(snapshot) {
         var username = snapshot.val().name;
         var users_classes = snapshot.val().classes;
-        for(var class_obj in users_classes){
+        for (var class_obj in users_classes) {
             var class_n = users_classes[class_obj].class_name;
-            if(class_n==class_name){ // found the class we need to show questions for
-               // console.log(users_classes[class_obj].questions);
+            if (class_n == class_name) { // found the class we need to show questions for
+                // console.log(users_classes[class_obj].questions);
                 the_questions = users_classes[class_obj].questions;
-                for(var index in the_questions){
-                    if(the_questions[index]===0) continue;
+                for (var index in the_questions) {
+                    if (the_questions[index] === 0) continue;
                     questions.push(the_questions[index]);
                 }
             }
         }
-        res.render('cards', {questions:questions, class_name:class_name});
+        res.render('cards', {uid: id, username: authData.password.email, questions: questions, class_name: class_name });
     });
 };

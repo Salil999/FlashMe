@@ -25,6 +25,7 @@
     "firebase": "^2.4.1",
     "firebase-token-generator": "^2.0.0",
     "jade": "^1.11.0",
-    "parse-json-response": "^1.0.1"
+    "parse-json-response": "^1.0.1",
+    "plotly": "^1.0.6"
   }
 }
