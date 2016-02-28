@@ -1,3 +1,20 @@
 #slogan {
 	font-size: 2.0em;
 }
+.t_question {
+  color: #16a085;
+  text-decoration: none;
+  -webkit-transition: .25s;
+          transition: .25s;
+  cursor: pointer;
+}
+.t_question:hover{
+	color: #1abc9c;
+  text-decoration: none;
+}
+.t_answer{
+	display: none;
+}
+.hide {
+	display: block;
+}

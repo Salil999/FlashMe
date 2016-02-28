@@ -89,20 +89,21 @@ exports.getProfile = function(req, res) {
         res.render('profile', { username: username, name: name, classes: classes });
     });
 };
-exports.addClass = function(req, res) {
+exports.postProfile = function(req,res){
     var authData = db.getAuth();
-    if (!authData) {
-        console.log("need to be logged in");
-        res.redirect('/');
+    if(!authData){
+        console.log("need to be logged in !");
         return;
     }
     var id = authData.uid;
-    //console.log(" " + (users.child(id)).child("name"));
+    var class_num = req.body.number;
+    var class_subj =  (req.body.subject).toUpperCase();
+    var class_name = class_subj + " " + class_num;
     (users.child(id)).child("classes").push().set({
-        class_name : req.params.class_name,
+        class_name : class_name,
         questions: [0]
     });
-    res.redirect('/class/'+req.params.class_name);
+    res.redirect('/class/'+class_name);
 };
 /* for now this link just lets users add questions for a class, later we need to add a link that lets them take a quiz */
 exports.getClass = function(req,res){

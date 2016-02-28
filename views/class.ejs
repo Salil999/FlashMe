@@ -58,7 +58,7 @@
 					</div>
 					<div class="col-sm-6"></div>
 					<div class="col-sm-3">
-						<button type="submit" class="btn btn-block btn-info">Start Quiz</button>
+						<a href="/quiz/<%=class_name%>" class="btn btn-block btn-info">Start Quiz</a>
 					</div>
 				</div>
 			</div>
@@ -71,12 +71,13 @@
 			<% } else { %>
 				<% questions.forEach(function(qa){ %>
 					<p>
-						<a href="">
+						<div class="t_question">
 							<%=qa.question %>
-						</a>
-					</p>
-					<p id="test">
+						</div>
+
+						<div class="t_answer">
 						<%= qa.answer   %>
+						</div>
 					</p>
 					<% }); } %>
 	</div>
@@ -87,6 +88,14 @@
 	<script src="/js/vendor/jquery.min.js"></script>
 	<script src="/js/vendor/video.js"></script>
 	<script src="/js/flat-ui.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.t_question').click(function(){
+				$(this).next().toggle();
+			});
+			event.preventDefault();
+		});
+	</script>
 </body>
 
 </html>

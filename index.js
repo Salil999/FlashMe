@@ -33,8 +33,9 @@ app.get('/signup', function(req, res) {
     res.sendFile(path.join(__dirname, 'views/signup.html'));
 });
 app.post('/signup', user.postSignup);
-app.get('/addClass/:class_name', user.addClass);
+/*app.get('/addClass/:class_name', user.addClass);*/
 app.get('/profile/:uid', user.getProfile);
+app.post('/profile/:uid', user.postProfile);
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'views/index.html'));
 });
