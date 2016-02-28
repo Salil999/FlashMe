@@ -41,7 +41,8 @@ app.get('/', function(req, res) {
 });
 app.get('/class/:class_name', user.getClass);
 app.post('/class/:class_name', user.postClass);
-app.get('/performance', user.getPerformance);
+app.get('/main/performance/', user.getPerformanceOptions);
+app.get('/performance/:class_name', user.getPerformance);
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));
 });

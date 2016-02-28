@@ -183,6 +183,29 @@ exports.getCards = function(req, res) {
         res.render('cards', { uid: id, username: authData.password.email, questions: questions, class_name: class_name });
     });
 };
+exports.getPerformanceOptions = function(req, res) {
+    var authData = db.getAuth();
+    if (!authData) {
+        console.log("need to be logged in !");
+        res.redirect('/');
+        return;
+    }
+    var id = authData.uid;
+
+    var username;
+    var name;
+    var classes = [];
+    (users.child(id)).once('value', function(snapshot) {
+        username = authData.password.email;
+        name = snapshot.val().name;
+        users_classes = snapshot.val().classes;
+        //console.log(users_classes);
+        for (var class_obj in users_classes) {
+            classes.push(users_classes[class_obj].class_name);
+        }
+        res.render('performance-main', { uid: id, username: username, name: name, classes: classes });
+    });
+};
 exports.getPerformance = function(req, res) {
     var authData = db.getAuth();
     if (!authData) {
@@ -193,54 +216,56 @@ exports.getPerformance = function(req, res) {
     var id = authData.uid;
     var class_name = req.params.class_name;
 
-    (users.child(id)).child('performance').once('value', function(snapshot) {
-        var username = snapshot.val().username;
-        var users_classes = snapshot.val().classes;
-        var data = snapshot.val().cs225;
+    (users.child(id)).child('performance').child(class_name).once('value', function(snapshot) {
+        /*var username = snapshot.val().username;
+        var users_classes = snapshot.val().classes;*/
+        var data = snapshot.val();
         console.log(data);
         console.log();
+        if (data) {
+            var i = 1;
+            var xFirstPlot = [];
+            var yFirstPlot = [];
+            var xSecondPlot = [];
+            var ySecondPlot = [];
 
-        var i = 1;
-        var xFirstPlot = [];
-        var yFirstPlot = [];
-        var xSecondPlot = [];
-        var ySecondPlot = [];
-
-        for (var class_obj in data) {
-            xFirstPlot.push(i++);
-            yFirstPlot.push(data[class_obj].score);
-        }
-
-        ////////////////////////
-        // PLOTLY INFORMATION //
-        ////////////////////////
-
-        var plottingData = [{
-            x: xFirstPlot,
-            y: yFirstPlot,
-            name: "Historical Data",
-            type: "scatter"
-        }, {
-            x: [1, 2, 3, 4],
-            y: [92, 87, 95, 84],
-            name: "Cumulative Average",
-            type: "scatter"
-        }];
-
-        var layout = {
-            title: "Performance Graph",
-            xaxis: {
-                title: "Tries"
-            },
-            yaxis: {
-                title: "Percentage Score"
+            for (var class_obj in data) {
+                xFirstPlot.push(i++);
+                yFirstPlot.push(data[class_obj].score);
             }
-        };
 
-        var graphOptions = { layout: layout, filename: "flashme", fileopt: "overwrite" };
-        plotly.plot(plottingData, graphOptions, function(err, msg) {
-            res.render('performance', { uid: id, username: authData.password.email, imgURL: msg.url + '.jpeg' });
-        });
+            ////////////////////////
+            // PLOTLY INFORMATION //
+            ////////////////////////
 
+            var plottingData = [{
+                x: xFirstPlot,
+                y: yFirstPlot,
+                name: "Historical Data",
+                type: "scatter"
+            }, {
+                x: [1, 2, 3, 4],
+                y: [92, 87, 95, 84],
+                name: "Cumulative Average",
+                type: "scatter"
+            }];
+
+            var layout = {
+                title: "Performance Graph",
+                xaxis: {
+                    title: "Tries"
+                },
+                yaxis: {
+                    title: "Percentage Score"
+                }
+            };
+
+            var graphOptions = { layout: layout, filename: "flashme", fileopt: "overwrite" };
+            plotly.plot(plottingData, graphOptions, function(err, msg) {
+                res.render('performance', { uid: id, username: authData.password.email, imgURL: msg.url + '.jpeg' });
+            });
+        } else {
+            res.redirect('/main/performance');
+        }
     });
 };
